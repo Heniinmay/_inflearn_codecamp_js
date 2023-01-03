@@ -10,8 +10,47 @@
       const output = () => {
         console.log("output 함수를 실행했어요");
       };
-      output();
-    </script>
+      const dataFromMaker = () => {
+        // id인지 Class인지 확실하게 적어줘야함
+        // console.log(document.querySelector('#target-year-input').value);
+        // console.log(document.querySelector('#target-month-input').value);
+        // console.log(document.querySelector('#target-date-input').value);
+
+       const inputYear = document.querySelector('#target-year-input').value;
+       const inputMonth = document.querySelector('#target-month-input').value;
+       const inputDate = document.querySelector('#target-date-input').value;
+
+      //  console.log(`${inputYear}-${inputMonth}-${inputDate}`)
+
+       const dateFormat = inputYear +'-'+ inputMonth +'-'+ inputDate;
+        return dateFormat;
+      }
+
+      const counterMaker = () => {
+        // console.log(dataFromMaker()); //return으로 함수값이 잘 넘어 오는 것을 확인
+        const targetDateInput = dataFromMaker() //return 데이터가 여기에 담겼따
+
+        const nowDate = new Date()
+        // console.log(nowDate)
+        const targetDate = new Date(targetDateInput).setHours(0,0,0,0); //자정을 기준으로 날짜를 다시 구해온다
+        // console.log(targetDate)
+
+        console.log(targetDate - nowDate);
+
+        const remaining = (targetDate - nowDate) / 1000; //왜 나누기 1000?
+
+        // Math.floor 내림, 소숫점들을 없애줌
+        const remainingDate = Math.floor(remaining / 3600 /24);
+        // % 나머지
+        const remainingHours = Math.floor(remaining /3600) % 24;
+        const remainingMin = Math.floor(remaining /60) % 60;
+        const remainingSec = Math.floor(remaining) % 60;
+
+        console.log(`D-Day까지 ${remainingDate}일, ${remainingHours}시간, ${remainingMin}분, ${remainingSec}초`);
+        
+      
+          }    
+          </script>
   </head>
   <body>
     <div id="div-id" class="div-class">안녕하세요.</div>
@@ -30,6 +69,11 @@
     <br />
 
     <!-- 2.5 querySelector를 활용한 데이터 참조 -->
-    <input />
+    <!-- id는 고유의 값으로 개별적으로 요소를 컨트롤,
+        class는 공통적인 요소들을 컨트롤 하기 위해서 지정 -->
+    <input id="target-year-input" class="target-input"/>
+    <input id="target-month-input" class="target-input"/>
+    <input id="target-date-input" class="target-input"/>
+    <button onclick="counterMaker()">버튼</button>
   </body>
 </html>
