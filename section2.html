@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tab - title</title>
+    <title>D-Day</title>
+    <link rel="stylesheet" href="section3.css" />
     <script>
       //   console.log("script 태그를 실행했어요.");
       const output = () => {
@@ -16,23 +17,23 @@
         // console.log(document.querySelector('#target-month-input').value);
         // console.log(document.querySelector('#target-date-input').value);
 
-       const inputYear = document.querySelector('#target-year-input').value;
-       const inputMonth = document.querySelector('#target-month-input').value;
-       const inputDate = document.querySelector('#target-date-input').value;
+        const inputYear = document.querySelector("#target-year-input").value;
+        const inputMonth = document.querySelector("#target-month-input").value;
+        const inputDate = document.querySelector("#target-date-input").value;
 
-      //  console.log(`${inputYear}-${inputMonth}-${inputDate}`)
+        //  console.log(`${inputYear}-${inputMonth}-${inputDate}`)
 
-       const dateFormat = inputYear +'-'+ inputMonth +'-'+ inputDate;
+        const dateFormat = inputYear + "-" + inputMonth + "-" + inputDate;
         return dateFormat;
-      }
+      };
 
       const counterMaker = () => {
         // console.log(dataFromMaker()); //return으로 함수값이 잘 넘어 오는 것을 확인
-        const targetDateInput = dataFromMaker() //return 데이터가 여기에 담겼따
+        const targetDateInput = dataFromMaker(); //return 데이터가 여기에 담겼따
 
-        const nowDate = new Date()
+        const nowDate = new Date();
         // console.log(nowDate)
-        const targetDate = new Date(targetDateInput).setHours(0,0,0,0); //자정을 기준으로 날짜를 다시 구해온다
+        const targetDate = new Date(targetDateInput).setHours(0, 0, 0, 0); //자정을 기준으로 날짜를 다시 구해온다
         // console.log(targetDate)
 
         console.log(targetDate - nowDate);
@@ -40,40 +41,47 @@
         const remaining = (targetDate - nowDate) / 1000; //왜 나누기 1000?
 
         // Math.floor 내림, 소숫점들을 없애줌
-        const remainingDate = Math.floor(remaining / 3600 /24);
+        const remainingDate = Math.floor(remaining / 3600 / 24);
         // % 나머지
-        const remainingHours = Math.floor(remaining /3600) % 24;
-        const remainingMin = Math.floor(remaining /60) % 60;
+        const remainingHours = Math.floor(remaining / 3600) % 24;
+        const remainingMin = Math.floor(remaining / 60) % 60;
         const remainingSec = Math.floor(remaining) % 60;
 
-        console.log(`D-Day까지 ${remainingDate}일, ${remainingHours}시간, ${remainingMin}분, ${remainingSec}초`);
-        
-      
-          }    
-          </script>
+        console.log(
+          `D-Day까지 ${remainingDate}일, ${remainingHours}시간, ${remainingMin}분, ${remainingSec}초`
+        );
+      };
+    </script>
   </head>
   <body>
-    <div id="div-id" class="div-class">안녕하세요.</div>
-    <div class="duv-class">반갑습니다.</div>
-    <span>잘 부탁드립니다.</span>
-    <span>인사해요.</span>
-
-    <br />
-    <br />
-
-    <!-- 2.4 onclick (camel아님) 이벤트 추가 -->
-    <button onclick="console.log('button을 눌렀어요')">Button</button>
-    <button onclick="output()">Button2</button>
-
-    <br />
-    <br />
-
     <!-- 2.5 querySelector를 활용한 데이터 참조 -->
     <!-- id는 고유의 값으로 개별적으로 요소를 컨트롤,
         class는 공통적인 요소들을 컨트롤 하기 위해서 지정 -->
-    <input id="target-year-input" class="target-input"/>
-    <input id="target-month-input" class="target-input"/>
-    <input id="target-date-input" class="target-input"/>
-    <button onclick="counterMaker()">버튼</button>
+
+    <h1>D-Day</h1>
+    <div class="d-day-counter">
+      <div class="d-day-child-container">
+        <span id="days">0</span>
+        <span>일</span>
+      </div>
+      <div class="d-day-child-container">
+        <span id="hours">0</span>
+        <span>시간</span>
+      </div>
+      <div class="d-day-child-container">
+        <span id="min">0</span>
+        <span>분</span>
+      </div>
+      <div class="d-day-child-container">
+        <span id="sec">0</span>
+        <span>초</span>
+      </div>
+    </div>
+    <div id="target-selector">
+      <input id="target-year-input" class="target-input" size="8" /> -
+      <input id="target-month-input" class="target-input" size="5" /> -
+      <input id="target-date-input" class="target-input" size="5" />
+    </div>
+    <button onclick="counterMaker()" id="start-btn">카운트다운 시작</button>
   </body>
 </html>
