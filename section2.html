@@ -36,7 +36,7 @@
         const targetDate = new Date(targetDateInput).setHours(0, 0, 0, 0); //자정을 기준으로 날짜를 다시 구해온다
         // console.log(targetDate)
 
-        console.log(targetDate - nowDate);
+        // console.log(targetDate - nowDate);
 
         const remaining = (targetDate - nowDate) / 1000; //왜 나누기 1000?
 
@@ -47,9 +47,20 @@
         const remainingMin = Math.floor(remaining / 60) % 60;
         const remainingSec = Math.floor(remaining) % 60;
 
-        console.log(
-          `D-Day까지 ${remainingDate}일, ${remainingHours}시간, ${remainingMin}분, ${remainingSec}초`
-        );
+        // console.log(
+        //   `D-Day까지 ${remainingDate}일, ${remainingHours}시간, ${remainingMin}분, ${remainingSec}초`
+        // );
+
+        // ! 조건에 따른 메세지 출력
+        // ! 만약, remaining === 0 이라면, 타이머가 종료되었습니다 를 리턴
+        // 수도코드를 작성했다. 로직 하나하나를 세분화해서 자세하게 작성하는 것이 중요하다.
+
+        if (remaining === 0 || remaining < 0) {
+          console.log("타이버가 종료되었습니다.");
+        } else if (isNaN(remaining)) {
+          //만약, 잘못된 날짜가 들어왔다면, 유효한 시간대가 아닙니다. 출력
+          console.log("유효한 시간대가 아닙니다.");
+        }
       };
     </script>
     <script src="section3.js"></script>
