@@ -36,9 +36,9 @@
         const targetDate = new Date(targetDateInput).setHours(0, 0, 0, 0); //자정을 기준으로 날짜를 다시 구해온다
         // console.log(targetDate)
 
-        console.log(targetDate - nowDate);
+      console.log(targetDate - nowDate);
 
-        const remaining = (targetDate - nowDate) / 1000; //왜 나누기 1000?
+      const remaining = (targetDate - nowDate) / 1000; //왜 나누기 1000?
 
         // Math.floor 내림, 소숫점들을 없애줌
         const remainingDate = Math.floor(remaining / 3600 / 24);
