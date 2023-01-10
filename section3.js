@@ -1,7 +1,8 @@
 const messageContainer = document.querySelector("#d-day-message");
-const container = document.querySelector("xc");
+const container = document.querySelector("#d-day-container");
+const intervalIdArr = [];
 
-// container.style.display = "none";
+container.style.display = "none";
 messageContainer.innerHTML = "<h3>D-Day를 입력해 주세요.</h3>"; //
 
 // textcontent 직접 텍스트를 입력해주는 태그
@@ -42,30 +43,25 @@ const counterMaker = () => {
   // const remainingMin = Math.floor(remaining / 60) % 60;
   // const remainingSec = Math.floor(remaining) % 60;
 
-  const remainingObj = {
-    remainingDate: Math.floor(remaining / 3600 / 24),
-    remainingHours: Math.floor(remaining / 3600) % 24,
-    remainingMin: Math.floor(remaining / 60) % 60,
-    remainingSec: Math.floor(remaining) % 60,
-  };
-
-  // console.log(
-  //   `D-Day까지 ${remainingDate}일, ${remainingHours}시간, ${remainingMin}분, ${remainingSec}초`
-  // );
-
   // ! 조건에 따른 메세지 출력
   // ! 만약, remaining === 0 이라면, 타이머가 종료되었습니다 를 리턴
   // 수도코드를 작성했다. 로직 하나하나를 세분화해서 자세하게 작성하는 것이 중요하다.
 
-  if (remaining === 0 || remaining < 0) {
-    console.log("타이머가 종료되었습니다.");
+  if (remaining <= 0) {
+    container.style.display = "none";
     messageContainer.innerHTML = "<h3>타이머가 종료되었습니다. </h3> ";
+    messageContainer.style.display = "flex";
+    setClearInterval();
   } else if (isNaN(remaining)) {
     //만약, 잘못된 날짜가 들어왔다면, 유효한 시간대가 아닙니다. 출력
+    container.style.display = "none";
     console.log("유효한 시간대가 아닙니다.");
     messageContainer.innerHTML = "<h3>유효한 시간대가 아닙니다.</h3> ";
+    messageContainer.style.display = "flex";
+    setClearInterval();
+    //return; //함수 종료 아래 코드 실행 안함
   }
-
+  console.log("함수 종료 안됨");
   /*
   const days = document.getElementById("days");
   const hours = document.getElementById("hours");
@@ -73,43 +69,65 @@ const counterMaker = () => {
   const sec = document.getElementById("sec");
 */
 
-  const documentObj = {
-    days: document.getElementById("days"),
-    hours: document.getElementById("hours"),
-    min: document.getElementById("min"),
-    sec: document.getElementById("sec"),
+  const remainingObj = {
+    remainingDate: Math.floor(remaining / 3600 / 24),
+    remainingHours: Math.floor(remaining / 3600) % 24,
+    remainingMin: Math.floor(remaining / 60) % 60,
+    remainingSec: Math.floor(remaining) % 60,
   };
-  documentObj["days"].textContent = remainingObj["remainingDate"];
-  documentObj["hours"].textContent = remainingObj["remainingHours"];
-  documentObj["min"].textContent = remainingObj["remainingMin"];
-  documentObj["sec"].textContent = remainingObj["remainingSec"];
+
+  const documentArr = ["days", "hours", "min", "sec"];
+  const timeKeys = Object.keys(remainingObj); //remainingObj의 key들만 가져온다
+
+  // documentObj["days"].textContent = remainingObj["remainingDate"];
+  // documentObj["hours"].textContent = remainingObj["remainingHours"];
+  // documentObj["min"].textContent = remainingObj["remainingMin"];
+  // documentObj["sec"].textContent = remainingObj["remainingSec"];
+
+  /**
+  for (let i = 0; i < timeKeys.length; i = i + 1) {
+    documentObj[docKyes[i]].textContent = remainingObj[timeKeys[i]];
+     * i = 1,
+     * documentObj[docKyes[1]] = documentObj[days] = document.getElementById("days") =>
+     * <span id="days">nn</span> 을 가져옴
+  }
+  // 밑에 리팩토링
+  */
+
+  // const documentObj = {
+  //   days: document.getElementById("days"),
+  //   hours: document.getElementById("hours"),
+  //   min: document.getElementById("min"),
+  //   sec: document.getElementById("sec"),
+  // };
+
+  // 4.6 For-In 문 ; 객체에 주로 사용
+  let i = 0;
+  for (let tag of documentArr) {
+    document.getElementById(tag).textContent = remainingObj[timeKeys[i]];
+    i++; // 1씩 증가시킨다 i = i + 1, 프로퍼티의 갯수만큼 조건식 진행
+  }
 };
 
-//3.4 비교 연산자
-console.log("1 === 1", 1 === 1);
-console.log(1 > 2); //false
+const starter = () => {
+  container.style.display = "flex";
+  messageContainer.style.display = "none";
+  counterMaker();
+  const intervalId = setInterval(counterMaker, 1000);
 
-const check = "check";
-console.log("check === 'check'", check === "check");
-console.log("check === 123", check === 123);
+  // for (let i = 0; i < 100; i++) {
+  //   setTimeout(() => {
+  //     counterMaker();
+  //   }, 1000);
 
-const arr = [1, 2, 3];
-console.log("arr === [1,2,3]", arr === [1, 2, 3]); //???
-
-//3.5 배열과 객체의 비교 (Notion)
-
-//3.6 조건문과 논리 연산자 (if문)
-const obj = {
-  name: "Peter",
-  age: 25,
+  intervalIdArr.push(intervalId);
 };
-if (obj.name === "Jason" || "Peter") {
-  console.log("Hi, " + obj.name);
-} else {
-  console.log("not member");
-}
 
-/**
- * && AND 연산자
- * || OR 연산자
- */
+const setClearInterval = function () {
+  container.style.display = "none";
+  messageContainer.innerHTML = "<h3>D-day를 입력해 주세요.</h3>";
+  messageContainer.style.display = "flex";
+  for (let i = 0; i < intervalIdArr.length; i++) {
+    clearInterval(intervalIdArr[i]);
+  }
+};
