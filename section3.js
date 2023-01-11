@@ -1,6 +1,5 @@
 const messageContainer = document.querySelector("#d-day-message");
 const container = document.querySelector("#d-day-container");
-const intervalIdArr = [];
 
 container.style.display = "none";
 messageContainer.innerHTML = "<h3>D-Day를 입력해 주세요.</h3>"; //
@@ -22,6 +21,8 @@ const dataFromMaker = () => {
   const dateFormat = inputYear + "-" + inputMonth + "-" + inputDate;
   return dateFormat;
 };
+
+const intervalIdArr = [];
 
 const counterMaker = () => {
   // console.log(dataFromMaker()); //return으로 함수값이 잘 넘어 오는 것을 확인
@@ -112,7 +113,7 @@ const counterMaker = () => {
 const starter = () => {
   container.style.display = "flex";
   messageContainer.style.display = "none";
-  counterMaker();
+  counterMaker(); //처음에 한번 실행, 1초 뒤에 실행되는 것은 아래 setInterval
   const intervalId = setInterval(counterMaker, 1000);
 
   // for (let i = 0; i < 100; i++) {
