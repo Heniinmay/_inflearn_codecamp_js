@@ -24,25 +24,10 @@ const dataFromMaker = () => {
 
 const intervalIdArr = [];
 
-const counterMaker = () => {
-  // console.log(dataFromMaker()); //return으로 함수값이 잘 넘어 오는 것을 확인
-  const targetDateInput = dataFromMaker(); //return 데이터가 여기에 담겼따
-
+const counterMaker = (data) => {
   const nowDate = new Date();
-  // console.log(nowDate)
-  const targetDate = new Date(targetDateInput).setHours(0, 0, 0, 0); //자정을 기준으로 날짜를 다시 구해온다
-  // console.log(targetDate)
-
-  // console.log(targetDate - nowDate);
-
+  const targetDate = new Date(data).setHours(0, 0, 0, 0); //자정을 기준으로 날짜를 다시 구해온다
   const remaining = (targetDate - nowDate) / 1000;
-
-  // Math.floor 내림, 소숫점들을 없애줌
-  // const remainingDate = Math.floor(remaining / 3600 / 24);
-  // % 나머지
-  // const remainingHours = Math.floor(remaining / 3600) % 24;
-  // const remainingMin = Math.floor(remaining / 60) % 60;
-  // const remainingSec = Math.floor(remaining) % 60;
 
   // ! 조건에 따른 메세지 출력
   // ! 만약, remaining === 0 이라면, 타이머가 종료되었습니다 를 리턴
@@ -53,6 +38,7 @@ const counterMaker = () => {
     messageContainer.innerHTML = "<h3>타이머가 종료되었습니다. </h3> ";
     messageContainer.style.display = "flex";
     setClearInterval();
+    return;
   } else if (isNaN(remaining)) {
     //만약, 잘못된 날짜가 들어왔다면, 유효한 시간대가 아닙니다. 출력
     container.style.display = "none";
@@ -60,9 +46,9 @@ const counterMaker = () => {
     messageContainer.innerHTML = "<h3>유효한 시간대가 아닙니다.</h3> ";
     messageContainer.style.display = "flex";
     setClearInterval();
-    //return; //함수 종료 아래 코드 실행 안함
+    return; //함수 종료 아래 코드 실행 안함
   }
-  console.log("함수 종료 안됨");
+  // console.log("함수 종료 안됨");
   /*
   const days = document.getElementById("days");
   const hours = document.getElementById("hours");
@@ -101,20 +87,33 @@ const counterMaker = () => {
   //   min: document.getElementById("min"),
   //   sec: document.getElementById("sec"),
   // };
-
+  //1의 자리 숫자 두 자리 포맷으로 변경해주기
+  const format = (time) => {
+    if (time < 10) {
+      return "0" + time;
+    } else {
+      return time;
+    }
+  };
   // 4.6 For-In 문 ; 객체에 주로 사용
   let i = 0;
   for (let tag of documentArr) {
-    document.getElementById(tag).textContent = remainingObj[timeKeys[i]];
+    const remainingTime = format(remainingObj[timeKeys[i]]);
+    document.getElementById(tag).textContent = remainingTime;
     i++; // 1씩 증가시킨다 i = i + 1, 프로퍼티의 갯수만큼 조건식 진행
   }
 };
 
 const starter = () => {
+  const targetDateInput = dataFromMaker();
+  localStorage.setItem("saved-date", targetDateInput);
   container.style.display = "flex";
   messageContainer.style.display = "none";
-  counterMaker(); //처음에 한번 실행, 1초 뒤에 실행되는 것은 아래 setInterval
-  const intervalId = setInterval(counterMaker, 1000);
+  setClearInterval();
+  counterMaker(targetDateInput); //처음에 한번 실행, 1초 뒤에 실행되는 것은 아래 setInterval
+  const intervalId = setInterval(() => {
+    counterMaker(targetDateInput);
+  }, 1000);
 
   // for (let i = 0; i < 100; i++) {
   //   setTimeout(() => {
@@ -125,10 +124,14 @@ const starter = () => {
 };
 
 const setClearInterval = function () {
-  container.style.display = "none";
-  messageContainer.innerHTML = "<h3>D-day를 입력해 주세요.</h3>";
-  messageContainer.style.display = "flex";
   for (let i = 0; i < intervalIdArr.length; i++) {
     clearInterval(intervalIdArr[i]);
   }
+};
+
+const resetTimer = () => {
+  container.style.display = "none";
+  messageContainer.innerHTML = "<h3>D-day를 입력해 주세요.</h3>";
+  messageContainer.style.display = "flex";
+  setClearInterval();
 };
