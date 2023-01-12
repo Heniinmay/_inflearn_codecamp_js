@@ -1,10 +1,10 @@
 const messageContainer = document.querySelector("#d-day-message");
 const container = document.querySelector("#d-day-container");
+const savedDate = localStorage.getItem("saved-date");
+const intervalIdArr = [];
 
 container.style.display = "none";
 messageContainer.innerHTML = "<h3>D-Day를 입력해 주세요.</h3>"; //
-
-// textcontent 직접 텍스트를 입력해주는 태그
 
 const dataFromMaker = () => {
   // id인지 Class인지 확실하게 적어줘야함
@@ -22,9 +22,10 @@ const dataFromMaker = () => {
   return dateFormat;
 };
 
-const intervalIdArr = [];
-
 const counterMaker = (data) => {
+  if (data !== savedDate) {
+    localStorage.setItem("saved-date", data);
+  }
   const nowDate = new Date();
   const targetDate = new Date(data).setHours(0, 0, 0, 0); //자정을 기준으로 날짜를 다시 구해온다
   const remaining = (targetDate - nowDate) / 1000;
@@ -42,13 +43,12 @@ const counterMaker = (data) => {
   } else if (isNaN(remaining)) {
     //만약, 잘못된 날짜가 들어왔다면, 유효한 시간대가 아닙니다. 출력
     container.style.display = "none";
-    console.log("유효한 시간대가 아닙니다.");
     messageContainer.innerHTML = "<h3>유효한 시간대가 아닙니다.</h3> ";
     messageContainer.style.display = "flex";
     setClearInterval();
     return; //함수 종료 아래 코드 실행 안함
   }
-  // console.log("함수 종료 안됨");
+
   /*
   const days = document.getElementById("days");
   const hours = document.getElementById("hours");
@@ -104,8 +104,10 @@ const counterMaker = (data) => {
   }
 };
 
-const starter = () => {
-  const targetDateInput = dataFromMaker();
+const starter = (targetDateInput) => {
+  if (!targetDateInput) {
+    targetDateInput = dataFromMaker();
+  }
   localStorage.setItem("saved-date", targetDateInput);
   container.style.display = "flex";
   messageContainer.style.display = "none";
@@ -124,6 +126,7 @@ const starter = () => {
 };
 
 const setClearInterval = function () {
+  localStorage.removeItem("saved-date");
   for (let i = 0; i < intervalIdArr.length; i++) {
     clearInterval(intervalIdArr[i]);
   }
@@ -135,3 +138,10 @@ const resetTimer = () => {
   messageContainer.style.display = "flex";
   setClearInterval();
 };
+
+if (savedDate) {
+  //saved data 가 있다면
+  starter();
+} else {
+  console.log("data is null");
+}
